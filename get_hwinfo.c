@@ -120,8 +120,8 @@ int upload_hwinfo(HWinfo* hwinfo,MYSQL *conn_ptr)
 	check_if_exist(hwinfo, conn_ptr);
 	hwinfo->hw_id = get_max_hwinfo_from_db(conn_ptr) + 1;
 	char* insert_sql;
-	insert_sql = g_strdup_printf("insert into hwinfo (\
-               hw_id             ,\
+	insert_sql = g_strdup_printf("insert into hwinfo ( \
+	       hw_id             ,\
                zichan_id             ,\
                model             ,\
                sku               ,\
@@ -169,7 +169,7 @@ int upload_hwinfo(HWinfo* hwinfo,MYSQL *conn_ptr)
                status            ,\
                come_from         ,\
                lan_mac           \
-		) values( \
+		) values(	 \
 		'%d',\		
 		'%s',\		
 		'%s',\		

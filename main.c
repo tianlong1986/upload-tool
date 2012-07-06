@@ -1,8 +1,9 @@
 #include <stdlib.h>  
 #include <stdio.h>  
+#include "function_common.h"
 #include "get_hwinfo.h"
 #include "get_longrun.h"
-#include "function_common.h"
+#include "get_network.h"
 //gcc -o test test.c `mysql_config --cflags --libs`
 //gcc -o test test.c `mysql_config --cflags` -L ./*
 /* 调试时编译使用*/
@@ -154,6 +155,11 @@ void upload_data(UPload* self, ENUM_UP_TYPE uptype)
 			break;
 			}
 		case UP_NETWORK:
+			{
+			Network * network = read_network_info(DATA_FILE);
+			network->hw_id = get_hwid_by_lanmac(conn_ptr, network->lan_mac);
+			upload_network(network, conn_ptr, FALSE);
+			}
 			break;
 		default:
 			;
@@ -282,6 +288,15 @@ int silent_upload(char* type)
 		mysql_close(conn_ptr);
 		return 0;
 	}	
+	if( g_strcmp0(type, "network") == 0 )
+	{
+		MYSQL *conn_ptr = init_con_db();		
+		Network * network = read_network_info(DATA_FILE);
+		network->hw_id = get_hwid_by_lanmac(conn_ptr, network->lan_mac);
+		upload_network(network, conn_ptr,TRUE);
+		mysql_close(conn_ptr);
+		return 0;
+	}
 	return 1;
 }
 
