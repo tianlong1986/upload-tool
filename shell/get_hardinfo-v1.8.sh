@@ -167,7 +167,12 @@ module_tmp=`echo $module | awk '{print $2}'`
 module=" $module"
 
 #LCD EDID
-EDID=`/usr/bin/edid-decode /sys/class/drm/card0-LVDS-1/edid | grep Manufacturer | awk '{printf $2}'`
+#EDID=`/usr/bin/edid-decode /sys/class/drm/card0-LVDS-1/edid | grep Manufacturer | awk '{printf $2}'`
+for i in `/usr/bin/edid-decode /sys/class/drm/card0-LVDS-1/edid |grep ASCII |awk '{print $3}'`
+do
+       EDID="$EDID $i"
+done
+
 
 #lan-mac
 lan_mac=`ifconfig |grep HWaddr |grep -v wlan |awk '{print $5}'`
