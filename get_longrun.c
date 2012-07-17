@@ -9,13 +9,14 @@ Longrun *read_longrun_info(char* data_file)
        	longrun = g_new0(Longrun, 1);
         //longrun->hw_id = ini_config_get_int(config, "Longrun", "hw_id", 0);
         longrun->test_item = ini_config_get_string(config, "Longrun_info", "test_item", NULL);
-        longrun->result = ini_config_get_int(config, "Longrun_info", "result", 0);
+        longrun->result = ini_config_get_string(config, "Longrun_info", "result", "F");
         longrun->date = ini_config_get_string(config, "Longrun_info", "date", NULL);
         longrun->os_ver = ini_config_get_string(config, "Longrun_info", "os_ver", NULL);
         longrun->cycle = ini_config_get_int(config, "Longrun_info", "cycle", 0);
         longrun->fail_cycle = ini_config_get_int(config, "Longrun_info", "fail_cycle", 0);
         longrun->cmdline = ini_config_get_string(config, "Longrun_info", "cmdline", NULL);
         longrun->kernel = ini_config_get_string(config, "Longrun_info", "kernel", NULL);
+        longrun->comment = ini_config_get_string(config, "Longrun_info", "comment", NULL);
 	longrun->lan_mac = ini_config_get_string(config, "Longrun_info", "lan_mac", NULL);
 	return longrun;
 }
@@ -34,6 +35,7 @@ int upload_longrun(Longrun* longrun, MYSQL *conn_ptr, gboolean silent)
 		cycle		,\
 		cmdline		,\
 		fail_cycle	,\
+		comment		,\
 		kernel		\
 		) values(	\
 		'%d',\
@@ -44,6 +46,7 @@ int upload_longrun(Longrun* longrun, MYSQL *conn_ptr, gboolean silent)
 		'%d',\
 		'%s',\
 		'%d',\
+		'%s',\
 		'%s'\
 		)",	
 		longrun->hw_id		,
@@ -54,6 +57,7 @@ int upload_longrun(Longrun* longrun, MYSQL *conn_ptr, gboolean silent)
 		longrun->cycle		,
 		longrun->cmdline	,
 		longrun->fail_cycle	,
+		longrun->comment	,
 		longrun->kernel	
 		);
 	g_message(sql);	

@@ -6,7 +6,7 @@ struct LONGRUN
 {
 	int hw_id;
 	char* test_item;
-	int   result;
+	char*   result;
 	char* date;
 	char* os_ver;
 	int   cycle;
@@ -14,6 +14,7 @@ struct LONGRUN
 	int   fail_cycle;
 	char* kernel;
 	char* lan_mac;
+	char* comment;
 };
 typedef struct LONGRUN Longrun;
 Longrun * read_longrun_info(char* data_file);
