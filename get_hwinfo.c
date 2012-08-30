@@ -74,11 +74,11 @@ HWinfo* read_hwinfo(char* data_file)
         hwinfo->chipset = ini_config_get_string(config, "hardware_info", "chipset", NULL);
         hwinfo->memory = ini_config_get_string(config, "hardware_info", "memory", NULL);
         hwinfo->hdd1 = ini_config_get_string(config, "hardware_info", "hdd1", NULL);
-        hwinfo->hdd2 = ini_config_get_string(config, "hardware_info", "hdd2", NULL);
+        hwinfo->hdd2 = ini_config_get_string(config, "hardware_info", "hdd2", "No");
         hwinfo->vga1_id = ini_config_get_string(config, "hardware_info", "vga1_id", NULL);
         hwinfo->vga1_desc = ini_config_get_string(config, "hardware_info", "vga1_desc", NULL);
-        hwinfo->vga2_id = ini_config_get_string(config, "hardware_info", "vga2_id", NULL);
-        hwinfo->vga2_desc = ini_config_get_string(config, "hardware_info", "vga2_desc", NULL);
+        hwinfo->vga2_id = ini_config_get_string(config, "hardware_info", "vga2_id", "No");
+        hwinfo->vga2_desc = ini_config_get_string(config, "hardware_info", "vga2_desc", "No");
         hwinfo->audio_id = ini_config_get_string(config, "hardware_info", "audio_id", NULL);
         hwinfo->audio_desc = ini_config_get_string(config, "hardware_info", "audio_desc", NULL);
         hwinfo->audio_codec_name = ini_config_get_string(config, "hardware_info", "audio_codec_name", NULL);
@@ -91,25 +91,28 @@ HWinfo* read_hwinfo(char* data_file)
         hwinfo->lan_desc = ini_config_get_string(config, "hardware_info", "lan_desc", NULL);
         hwinfo->bluetooth_id = ini_config_get_string(config, "hardware_info", "bluetooth_id", NULL);
         hwinfo->bluetooth_desc = ini_config_get_string(config, "hardware_info", "bluetooth_desc", NULL);
-        hwinfo->_3G_id = ini_config_get_string(config, "hardware_info", "3G_id", NULL);
-        hwinfo->_3G_desc = ini_config_get_string(config, "hardware_info", "3G_desc", NULL);
+        hwinfo->_3G_id = ini_config_get_string(config, "hardware_info", "3G_id", "No");
+        hwinfo->_3G_desc = ini_config_get_string(config, "hardware_info", "3G_desc", "No");
         hwinfo->touchpad = ini_config_get_string(config, "hardware_info", "touchpad", NULL);
         hwinfo->cardreader_id = ini_config_get_string(config, "hardware_info", "cardreader_id", NULL);
         hwinfo->cardreader_desc = ini_config_get_string(config, "hardware_info", "cardreader_desc", NULL);
         hwinfo->camera_id = ini_config_get_string(config, "hardware_info", "camera_id", NULL);
         hwinfo->camera_desc = ini_config_get_string(config, "hardware_info", "camera_desc", NULL);
         hwinfo->vga_output = ini_config_get_string(config, "hardware_info", "vga_output", NULL);
-        hwinfo->hdmi_output = ini_config_get_string(config, "hardware_info", "hdmi_output", NULL);
-        hwinfo->hdmi_codec_name = ini_config_get_string(config, "hardware_info", "hdmi_codec_name", NULL);
-        hwinfo->hdmi_codec_vid = ini_config_get_string(config, "hardware_info", "hdmi_codec_vid", NULL);
-        hwinfo->hdmi_codec_sid = ini_config_get_string(config, "hardware_info", "hdmi_codec_sid", NULL);
-        hwinfo->hdmi_codec_revid = ini_config_get_string(config, "hardware_info", "hdmi_codec_revid", NULL);
+        hwinfo->hdmi_output = ini_config_get_string(config, "hardware_info", "hdmi_output", "No");
+        hwinfo->hdmi_codec_name = ini_config_get_string(config, "hardware_info", "hdmi_codec_name", "No");
+        hwinfo->hdmi_codec_vid = ini_config_get_string(config, "hardware_info", "hdmi_codec_vid", "No");
+        hwinfo->hdmi_codec_sid = ini_config_get_string(config, "hardware_info", "hdmi_codec_sid", "No");
+        hwinfo->hdmi_codec_revid = ini_config_get_string(config, "hardware_info", "hdmi_codec_revid", "No");
         hwinfo->update = ini_config_get_string(config, "hardware_info", "update", NULL);
         hwinfo->LCD = ini_config_get_string(config, "hardware_info", "LCD", NULL);
         hwinfo->keeper = ini_config_get_string(config, "hardware_info", "keeper", NULL);
         hwinfo->status = ini_config_get_string(config, "hardware_info", "status", NULL);
         hwinfo->come_from = ini_config_get_string(config, "hardware_info", "come_from", NULL);
         hwinfo->lan_mac = ini_config_get_string(config, "hardware_info", "lan_mac", NULL);
+        hwinfo->received_date = ini_config_get_string(config, "hardware_info", "received_date", NULL);
+        hwinfo->AC = ini_config_get_string(config, "hardware_info", "AC", NULL);
+        hwinfo->threeD_controller = ini_config_get_string(config, "hardware_info", "3D_controller", NULL);
 	return hwinfo;
 }
 
@@ -168,9 +171,15 @@ int upload_hwinfo(HWinfo* hwinfo,MYSQL *conn_ptr)
                keeper            ,\
                status            ,\
                come_from         ,\
-               lan_mac           \
+               lan_mac           ,\
+               received_date     ,\
+               AC                ,\
+               3D_controller     \
 		) values(	 \
 		'%d',\		
+		'%s',\		
+		'%s',\		
+		'%s',\		
 		'%s',\		
 		'%s',\		
 		'%s',\		
@@ -266,7 +275,10 @@ int upload_hwinfo(HWinfo* hwinfo,MYSQL *conn_ptr)
                hwinfo->keeper           ,
                hwinfo->status           ,
                hwinfo->come_from        ,
-               hwinfo->lan_mac
+               hwinfo->lan_mac		,
+               hwinfo->received_date    ,
+               hwinfo->AC		,
+               hwinfo->threeD_controller
 		);
 	g_message(insert_sql);
 	if(mysql_query(conn_ptr, insert_sql))
@@ -282,7 +294,7 @@ int upload_hwinfo(HWinfo* hwinfo,MYSQL *conn_ptr)
 		tmp2 = g_strdup_printf("The data has upload successful!\n please remeber the machine id:%d,it saved in /tmp/hwid.log",hwinfo->hw_id);
 		//pop_msg_window(tmp2, SUCCESS);
 		pop_message_box(tmp2,"Congratulations, upload to server successfully" );
-		g_print("\n****************import*************\n the machine id is:%d, you should rember it, it also saved in /tmp/hwid.log\n***************************************\n**************ByeBye*******************************\n",hwinfo->hw_id);
+		g_print("\n****************important*************\n the machine id is:%d, you should rember it, it also saved in /tmp/hwid.log\n***************************************\n**************ByeBye*******************************\n",hwinfo->hw_id);
 		g_free(tmp1);
 		g_free(tmp2);
 		exit(0);

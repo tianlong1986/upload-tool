@@ -228,7 +228,7 @@ GtkWidget * create_fixed(UPload *self)
 	self->entry_zc_id = gtk_entry_new();
 	gtk_fixed_put(GTK_FIXED(fixed), self->entry_zc_id, 410,10);
 
-	self->chk_hw_info = gtk_check_button_new_with_label("Upload ardware information");
+	self->chk_hw_info = gtk_check_button_new_with_label("Upload Hardware information");
 	self->chk_upload_all = gtk_check_button_new_with_label("Upload all test result");
   	g_signal_connect(G_OBJECT( self->chk_hw_info), "clicked",
                 G_CALLBACK (toggle_activity_hwinfo),self);
