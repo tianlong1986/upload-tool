@@ -10,6 +10,7 @@ Longrun *read_longrun_info(char* data_file)
         //longrun->hw_id = ini_config_get_int(config, "Longrun", "hw_id", 0);
         longrun->test_item = ini_config_get_string(config, "Longrun_info", "test_item", NULL);
         longrun->result = ini_config_get_string(config, "Longrun_info", "result", "F");
+	g_message("tom debug,  result=%s",longrun->result);
         longrun->date = ini_config_get_string(config, "Longrun_info", "date", NULL);
         longrun->os_ver = ini_config_get_string(config, "Longrun_info", "os_ver", NULL);
         longrun->cycle = ini_config_get_int(config, "Longrun_info", "cycle", 0);
@@ -39,7 +40,7 @@ int upload_longrun(Longrun* longrun, MYSQL *conn_ptr, gboolean silent)
 		kernel		\
 		) values(	\
 		'%d',\
-		'%d',\
+		'%s',\
 		'%s',\
 		'%s',\
 		'%s',\
