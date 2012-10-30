@@ -114,7 +114,8 @@ int get_hwid_by_lanmac(MYSQL *conn_ptr,char* lanmac)
 	MYSQL_RES *res;
 	MYSQL_ROW row;
 	int hw_id;
-	sql = g_strdup_printf("select hw_id from hwinfo where lan_mac='%s'",lanmac);		
+	char* Uplanmac = g_ascii_strup(lanmac, strlen(lanmac));
+	sql = g_strdup_printf("select hw_id from hwinfo where upper(lan_mac)='%s'",Uplanmac);		
 	if(mysql_query(conn_ptr, sql))
 	{
 		g_warning("get the hw_id error");
