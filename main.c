@@ -115,7 +115,8 @@ int get_hwid_by_lanmac(MYSQL *conn_ptr,char* lanmac)
 	MYSQL_RES *res;
 	MYSQL_ROW row;
 	int hw_id;
-	sql = g_strdup_printf("select hw_id from hwinfo where lan_mac='%s'",lanmac);		
+	char* Uplanmac = g_ascii_strup(lanmac, strlen(lanmac));
+	sql = g_strdup_printf("select hw_id from hwinfo where upper(lan_mac)='%s'",Uplanmac);		
 	if(mysql_query(conn_ptr, sql))
 	{
 		g_warning("get the hw_id error");
@@ -229,7 +230,7 @@ GtkWidget * create_fixed(UPload *self)
 	self->entry_zc_id = gtk_entry_new();
 	gtk_fixed_put(GTK_FIXED(fixed), self->entry_zc_id, 410,10);
 
-	self->chk_hw_info = gtk_check_button_new_with_label("Upload ardware information");
+	self->chk_hw_info = gtk_check_button_new_with_label("Upload Hardware information");
 	self->chk_upload_all = gtk_check_button_new_with_label("Upload all test result");
   	g_signal_connect(G_OBJECT( self->chk_hw_info), "clicked",
                 G_CALLBACK (toggle_activity_hwinfo),self);

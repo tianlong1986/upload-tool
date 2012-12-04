@@ -51,6 +51,9 @@ struct HWINFO
         char* status            ; 
         char* come_from         ; 
         char* lan_mac           ;	
+        char* received_date     ;	
+        char* AC	        ;	
+        char* threeD_controller	;	
 };
 typedef struct HWINFO HWinfo;
 
