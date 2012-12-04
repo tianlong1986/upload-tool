@@ -65,6 +65,7 @@ static MYSQL* init_con_db()
 	db_name = ini_config_get_string(ini_config, "mysql_db", "db_name", "test");
 	port = ini_config_get_int(ini_config, "mysql_db", "port", 0);
 	conn_ptr = mysql_real_connect(conn_ptr, host, user, passwd,  db_name, port, NULL, 0);  
+	mysql_set_character_set( conn_ptr, "utf8");
 	if(!conn_ptr)
 	{
 		g_error("mysql_real_connect failed");	
